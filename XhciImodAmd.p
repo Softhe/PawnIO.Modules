@@ -22,8 +22,10 @@
 // Restricted AMD xHCI interrupt-moderation module.
 
 #define PCI_VENDOR_ID_AMD              0x1022
+#define PCI_DEVICE_ID_AMD_USB_15B6     0x15B6
 #define PCI_DEVICE_ID_AMD_USB_15B7     0x15B7
 #define PCI_DEVICE_ID_AMD_USB_15B8     0x15B8
+#define PCI_DEVICE_ID_AMD_USB_43F7     0x43F7
 #define PCI_DEVICE_ID_AMD_USB_43FD     0x43FD
 
 #define PCI_CFG_COMMAND                0x04
@@ -68,8 +70,10 @@ new g_max_intrs = 0;
 
 bool:is_allowed_device(device_id) {
     switch (device_id) {
-        case PCI_DEVICE_ID_AMD_USB_15B7,
+        case PCI_DEVICE_ID_AMD_USB_15B6,
+             PCI_DEVICE_ID_AMD_USB_15B7,
              PCI_DEVICE_ID_AMD_USB_15B8,
+             PCI_DEVICE_ID_AMD_USB_43F7,
              PCI_DEVICE_ID_AMD_USB_43FD:
             return true;
     }
