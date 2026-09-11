@@ -166,6 +166,10 @@ DEFINE_IOCTL_SIZED(ioctl_read_msr, 1, 1) {
 
 /// Write MSR.
 ///
+/// Allows PSTATE/HWCR/PMGT/CPPC/LS_CFG/IC_CFG/DC_CFG with arbitrary values
+/// by design for tuning tools. Requires admin to load/use module.
+/// Do not expose to untrusted callers.
+///
 /// @param in [0] = MSR, [1] = Value write
 /// @param in_size Must be 2
 /// @param out Unused
