@@ -108,6 +108,11 @@ DEFINE_IOCTL_SIZED(ioctl_read_miscctl, 2, 1) {
     new cpu_idx = in[0];
     new offset = in[1];
 
+    // PCI devices 24-31 hold the per-node MISCCTL (F3). Clamp to that window
+    // so a negative or large idx can't reach arbitrary bus 0 devices/functions.
+    if (cpu_idx < 0 || cpu_idx > 7)
+        return STATUS_INVALID_PARAMETER;
+
     new didvid;
     new NTSTATUS:status = pci_config_read_dword(PCI_BUS, PCI_BASE_DEVICE + cpu_idx, PCI_MISCCTL_FUNCTION, 0, didvid);
     if (!NT_SUCCESS(status))
