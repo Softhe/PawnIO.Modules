@@ -198,7 +198,14 @@ DEFINE_IOCTL_SIZED(ioctl_read_smn, 1, 1) {
     if ((didvid & 0xFFFF) != 0x1022)
         return STATUS_NOT_SUPPORTED;
 
-    status = pci_config_write_dword(0, 0, 0, SMN_INDEX_OFFSET, in[0]);
+    // SMN is dword-accessed via index/data ports. Require alignment so
+    // unaligned values can't hit unexpected behavior. Full allowlist of
+    // SMN offsets is still TODO - this remains broad by design for monitoring.
+    new smn_offset = in[0];
+    if ((smn_offset & 3) != 0)
+        return STATUS_INVALID_PARAMETER;
+
+    status = pci_config_write_dword(0, 0, 0, SMN_INDEX_OFFSET, smn_offset);
     if (!NT_SUCCESS(status))
         return status;
     status = pci_config_read_dword(0, 0, 0, SMN_DATA_OFFSET, out[0]);
