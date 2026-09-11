@@ -86,11 +86,11 @@ DEFINE_IOCTL_SIZED(ioctl_query_smm, 6, 6) {
     switch (func) {
         case 0x0025, 0xa069, 0x00a3, 0x02a3, 0x03a3, 0x05a3,
              0x10a3, 0x11a3, SMM_GET_DELL_SIG1, SMM_GET_DELL_SIG2:
-            break;
+            return dell_smm_call(in, out);
         default:
             return STATUS_ACCESS_DENIED;
     }
-    return dell_smm_call(in, out);
+    return STATUS_ACCESS_DENIED;
 }
 
 NTSTATUS:main() {
